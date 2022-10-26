@@ -1,0 +1,2 @@
+package com.example.energyutility.repository;public interface UserRepository {
+}
