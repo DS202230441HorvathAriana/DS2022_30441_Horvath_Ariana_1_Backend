@@ -24,8 +24,7 @@ public class User {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<MeteringDevice> meteringDevices;
 
-    public User(Long userId, String username, String password, Role role) {
-        this.userId = userId;
+    public User(String username, String password, Role role) {
         this.username = username;
         this.password = password;
         this.role = role;

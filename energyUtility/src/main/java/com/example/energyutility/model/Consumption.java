@@ -1,7 +1,9 @@
 package com.example.energyutility.model;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "consumption")
@@ -12,8 +14,11 @@ public class Consumption {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long consumptionId;
 
-    @Column(name = "timestamp")
-    private LocalDateTime timestamp;
+    @Column(name = "date")
+    private LocalDate date;
+
+    @Column(name = "time")
+    private LocalTime time;
 
     @Column(name = "energy_consumption")
     private float energyConsumption;
@@ -22,9 +27,10 @@ public class Consumption {
     @JoinColumn(name = "metering_device_id")
     private MeteringDevice meteringDevice;
 
-    public Consumption(Long consumptionId, LocalDateTime timestamp, float energyConsumption, MeteringDevice meteringDevice) {
+    public Consumption(Long consumptionId, LocalDate date, LocalTime time, float energyConsumption, MeteringDevice meteringDevice) {
         this.consumptionId = consumptionId;
-        this.timestamp = timestamp;
+        this.date = date;
+        this.time = time;
         this.energyConsumption = energyConsumption;
         this.meteringDevice = meteringDevice;
     }
@@ -41,12 +47,20 @@ public class Consumption {
         this.consumptionId = consumptionId;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
     }
 
     public float getEnergyConsumption() {
