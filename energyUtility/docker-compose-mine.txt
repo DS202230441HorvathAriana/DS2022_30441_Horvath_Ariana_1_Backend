@@ -1,0 +1,68 @@
+version: '3'
+
+services:
+    
+    tomcat-db-api:
+        image: arianahorvath30441backend
+        ports:
+            - "8080:8080"
+			
+--de pe grup			
+version: "3"
+
+services:
+    mysql:
+        image: containerregistryarianahorvath30441.azurecr.io/db:latest
+        env_file: ./.env
+        container_name: nice_driscoll
+        ports:
+            - "3306:3307"
+        networks:
+             - DS_NETWORK
+        volumes:
+            -  arianahorvath30441volume:/var/lib/mysql
+        expose:
+            - "33061"
+    arianahorvath30441backend:
+        depends_on:
+            - mysql
+        build:
+            context: ./energyUtiliy/energyUtility
+            dockerfile: ./Dockerfile
+        container_name: energyutility
+        restart: on-failure
+        env_file: ./.env
+        ports:
+            - "8080:8080"
+        networks:
+            - DS_NETWORK
+
+networks:
+    DS_NETWORK:
+        driver: bridge
+
+volumes:
+    arianahorvath30441volume: { }
+
+
+--de pe grup 
+FROM maven:3.6.3-jdk-11 AS builder
+
+COPY ./src/ /root/src
+COPY ./pom.xml /root/
+WORKDIR /root
+RUN mvn package -Dmaven.test.skip=true
+RUN java -Djarmode=layertools -jar /root/target/energyUtility-0.0.1-SNAPSHOT.jar list
+RUN java -Djarmode=layertools -jar /root/target/energyUtility-0.0.1-SNAPSHOT.jar extract
+RUN ls -l /root
+
+FROM openjdk:11.0.6-jre
+
+COPY --from=builder /root/dependencies/ ./
+COPY --from=builder /root/snapshot-dependencies/ ./
+
+RUN sleep 10
+COPY --from=builder /root/spring-boot-loader/ ./
+COPY --from=builder /root/application/ ./
+EXPOSE 8080
+ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher","-XX:+UseContainerSupport -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -Xms512m -Xmx512m -XX:+UseG1GC -XX:+UseSerialGC -Xss512k -XX:MaxRAM=72m"]	
