@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ConsumptionService {
@@ -20,7 +21,7 @@ public class ConsumptionService {
         List<ConsumptionDTO> consumtionDTOS = consumptionRepository.findAll()
                 .stream()
                 .map(ConsumptionBuilder::toConsumptionDTO)
-                .toList();
+                .collect(Collectors.toList());
         return consumtionDTOS;
     }
 
@@ -29,7 +30,7 @@ public class ConsumptionService {
                 consumptionRepository.findAllByMeteringDevice_MeteringDeviceIdAndDate(deviceId, date)
                         .stream()
                         .map(ConsumptionBuilder::toConsumptionDTO)
-                        .toList();
+                        .collect(Collectors.toList());
         return consumptionDTOS;
     }
 }

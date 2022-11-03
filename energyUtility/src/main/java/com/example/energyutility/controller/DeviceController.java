@@ -1,5 +1,6 @@
 package com.example.energyutility.controller;
 
+import com.example.energyutility.dto.MessageDTO;
 import com.example.energyutility.dto.MeteringDeviceDTO;
 import com.example.energyutility.model.MeteringDevice;
 import com.example.energyutility.service.DeviceService;
@@ -18,12 +19,12 @@ public class DeviceController {
     private DeviceService deviceService;
 
     @PostMapping(value = "/devices")
-    ResponseEntity<String> saveMeteringDevice(@RequestBody MeteringDeviceDTO deviceDTO) {
+    ResponseEntity<MessageDTO> saveMeteringDevice(@RequestBody MeteringDeviceDTO deviceDTO) {
         Long id = deviceService.save(deviceDTO);
         if (id == 0L)
-            return new ResponseEntity<>("Associated client not existent!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO(false, "Associated client not existent!"), HttpStatus.NOT_FOUND);
         else
-            return new ResponseEntity<>(id.toString(), HttpStatus.CREATED);
+            return new ResponseEntity<>(new MessageDTO(true, "Device successfully added!"), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/device/{id}")
@@ -50,19 +51,19 @@ public class DeviceController {
     }
 
     @PutMapping(value = "/devices/{id}")
-    ResponseEntity<String> updateDevice(@PathVariable Long id, @RequestBody MeteringDeviceDTO deviceDTO) {
+    ResponseEntity<MessageDTO> updateDevice(@PathVariable Long id, @RequestBody MeteringDeviceDTO deviceDTO) {
         MeteringDevice updatedDevice = deviceService.updateDevice(id, deviceDTO);
         if (updatedDevice != null)
-            return new ResponseEntity<>("Device successfully updated.", HttpStatus.OK);
+            return new ResponseEntity<>(new MessageDTO(true, "Device successfully updated."), HttpStatus.OK);
         else
-            return new ResponseEntity<>("Associated client not existent!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO(false,"Associated client not existent!"), HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping(value = "/devices/{id}")
-    ResponseEntity<String> deleteDevice(@PathVariable Long id) {
+    ResponseEntity<MessageDTO> deleteDevice(@PathVariable Long id) {
         if (deviceService.deleteDevice(id))
-            return new ResponseEntity<>("Device successfully deleted.", HttpStatus.OK);
+            return new ResponseEntity<>(new MessageDTO(true, "Device successfully deleted."), HttpStatus.OK);
         else
-            return new ResponseEntity<>("Device not existent!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO(false,"Device not existent!"), HttpStatus.NOT_FOUND);
     }
 }

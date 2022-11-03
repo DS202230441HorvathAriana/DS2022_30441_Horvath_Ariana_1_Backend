@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DeviceService {
@@ -41,7 +42,7 @@ public class DeviceService {
         List<MeteringDeviceDTO> devices = deviceRepository.findAll()
                 .stream()
                 .map(DeviceBuilder::toDeviceDTO)
-                .toList();
+                .collect(Collectors.toList());
         return devices;
     }
 
@@ -51,7 +52,7 @@ public class DeviceService {
             List<MeteringDeviceDTO> deviceDTOS = deviceRepository.findAllByClient_Username(username)
                     .stream()
                     .map(DeviceBuilder::toDeviceDTO)
-                    .toList();
+                    .collect(Collectors.toList());
             return deviceDTOS;
         } else
             return null;

@@ -1,5 +1,6 @@
 package com.example.energyutility.controller;
 
+import com.example.energyutility.dto.MessageDTO;
 import com.example.energyutility.dto.UserDTO;
 import com.example.energyutility.model.MeteringDevice;
 import com.example.energyutility.model.User;
@@ -19,13 +20,13 @@ public class UserController {
     private UserService userService;
 
     @PostMapping(value = "/users")
-    ResponseEntity<String> registerUser(@RequestBody UserDTO newUser) {
+    ResponseEntity<MessageDTO> registerUser(@RequestBody UserDTO newUser) {
         User addedUser = userService.save(newUser);
         if (addedUser != null)
-            return new ResponseEntity<>("User " + addedUser.getUsername() + " successfully added.",
+            return new ResponseEntity<>(new MessageDTO(true,"User " + addedUser.getUsername() + " successfully added."),
                     HttpStatus.CREATED);
         else
-            return new ResponseEntity<>("User with username " + newUser.getUsername() + " already existent!",
+            return new ResponseEntity<>(new MessageDTO(false,"User with username " + newUser.getUsername() + " already existent!"),
                     HttpStatus.CONFLICT);
     }
 
@@ -33,6 +34,12 @@ public class UserController {
     ResponseEntity<List<UserDTO>> findAllClients() {
         List<UserDTO> clients = userService.findAllClients();
         return new ResponseEntity<>(clients, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/users")
+    ResponseEntity<List<UserDTO>> findAllUsers() {
+        List<UserDTO> users = userService.findAllUsers();
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping(value = "/users/{username}")
@@ -44,29 +51,30 @@ public class UserController {
     }
 
     @PutMapping(value = "/users/{username}")
-    ResponseEntity<String> updateUser(@PathVariable String username, @RequestBody UserDTO userDTO) {
+    ResponseEntity<MessageDTO> updateUser(@PathVariable String username, @RequestBody UserDTO userDTO) {
         User updatedUser = userService.updateUser(username, userDTO);
         if (updatedUser != null)
-            return new ResponseEntity<>("User successfully updated.", HttpStatus.OK);
+            return new ResponseEntity<>(new MessageDTO(true, "User successfully updated."), HttpStatus.OK);
         else
-            return new ResponseEntity<>("User with username " + username + " not existent or new username taken",
-                    HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO(false, "User with username " + username +
+                    " not existent or new username taken"), HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping(value = "/users/{username}")
-    ResponseEntity<String> deleteUser(@PathVariable String username) {
+    ResponseEntity<MessageDTO> deleteUser(@PathVariable String username) {
         if (userService.deleteUser(username)) {
-            return new ResponseEntity<>("User successfully deleted!", HttpStatus.OK);
+            return new ResponseEntity<>(new MessageDTO(true, "User successfully deleted!"), HttpStatus.OK);
         } else
-            return new ResponseEntity<>("User with username " + username + " not existent.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO(false,"User with username " + username + " not existent."),
+                    HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/user")
-    ResponseEntity<String> logInAdmin(@RequestBody UserDTO userDTO) {
+    ResponseEntity<MessageDTO> logInAdmin(@RequestBody UserDTO userDTO) {
         String message = userService.logInUser(userDTO);
         if (message.compareTo("CLIENT") == 0 || message.compareTo("ADMIN") == 0)
-            return new ResponseEntity<>(message, HttpStatus.OK);
+            return new ResponseEntity<>(new MessageDTO(true, message), HttpStatus.OK);
         else
-            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageDTO(false, message), HttpStatus.NOT_FOUND);
     }
 }

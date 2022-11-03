@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
 public class UserService {
@@ -34,7 +36,15 @@ public class UserService {
         List<UserDTO> userDTOS = userRepository.findAllByRole(Role.CLIENT)
                 .stream()
                 .map(UserBuilder::toUserDTO)
-                .toList();
+                .collect(Collectors.toList());
+        return userDTOS;
+    }
+
+    public List<UserDTO> findAllUsers() {
+        List<UserDTO> userDTOS = userRepository.findAll()
+                .stream()
+                .map(UserBuilder::toUserDTO)
+                .collect(Collectors.toList());
         return userDTOS;
     }
 
@@ -55,8 +65,16 @@ public class UserService {
                 else
                     return null;
             }
-            if (!BCrypt.checkpw(newUserDTO.getPassword(), user.getPassword()))
-                user.setPassword(BCrypt.hashpw(newUserDTO.getPassword(), BCrypt.gensalt()));
+            if (newUserDTO.getPassword().compareTo("") != 0) {
+                if (!BCrypt.checkpw(newUserDTO.getPassword(), user.getPassword()))
+                    user.setPassword(BCrypt.hashpw(newUserDTO.getPassword(), BCrypt.gensalt()));
+            }
+            if (user.getRole().toString().compareTo(newUserDTO.getRole()) != 0)  {
+                if (newUserDTO.getRole().compareTo("CLIENT") == 0)
+                    user.setRole(Role.CLIENT);
+                else
+                    user.setRole(Role.ADMIN);
+            }
             userRepository.save(user);
             return user;
         } else {

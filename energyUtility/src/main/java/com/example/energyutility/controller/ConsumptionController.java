@@ -11,7 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -30,6 +35,7 @@ public class ConsumptionController {
     @GetMapping(value = "/consumptions/{id}/{date}")
     ResponseEntity<List<ConsumptionDTO>> findAllByDeviceAndDate(@PathVariable Long id, @PathVariable LocalDate date) {
         List<ConsumptionDTO> consumptions = consumptionService.findAllByDeviceAndDate(id, date);
+        consumptions.sort(Comparator.comparing(ConsumptionDTO::getTime));
         return new ResponseEntity<>(consumptions, HttpStatus.OK);
     }
 }
