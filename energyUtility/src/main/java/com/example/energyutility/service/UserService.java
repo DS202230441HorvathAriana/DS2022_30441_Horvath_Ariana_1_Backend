@@ -2,7 +2,6 @@ package com.example.energyutility.service;
 
 import com.example.energyutility.dto.UserDTO;
 import com.example.energyutility.dto.builder.UserBuilder;
-import com.example.energyutility.model.MeteringDevice;
 import com.example.energyutility.model.Role;
 import com.example.energyutility.model.User;
 import com.example.energyutility.repository.UserRepository;

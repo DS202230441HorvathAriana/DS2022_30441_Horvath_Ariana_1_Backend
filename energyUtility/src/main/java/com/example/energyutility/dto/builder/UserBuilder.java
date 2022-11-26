@@ -3,8 +3,6 @@ package com.example.energyutility.dto.builder;
 import com.example.energyutility.dto.UserDTO;
 import com.example.energyutility.model.Role;
 import com.example.energyutility.model.User;
-import com.example.energyutility.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class UserBuilder {
 

@@ -1,9 +1,7 @@
 package com.example.energyutility.message_consumer;
 
 import com.example.energyutility.dto.ConsumptionDTO;
-import com.example.energyutility.dto.MeteringDeviceDTO;
 import com.example.energyutility.dto.TextMessageDTO;
-import com.example.energyutility.dto.builder.DeviceBuilder;
 import com.example.energyutility.model.HourlyConsumptionPart;
 import com.example.energyutility.model.MeteringDevice;
 import com.example.energyutility.service.ConsumptionService;
@@ -41,7 +39,7 @@ public class MessageConsumer {
         ObjectMapper mapper = new ObjectMapper();
         ConsumptionJSON consumption = mapper.readValue(consumptionJSON, ConsumptionJSON.class);
         long deviceId = consumption.getMeteringDeviceId();
-        System.out.println("device existent in hash: "+intermediateConsumptions.containsKey(deviceId));
+
         if (intermediateConsumptions.containsKey(deviceId)) {
             intermediateConsumptions.get(deviceId).setValueSum(
                     intermediateConsumptions.get(deviceId).getValueSum() + consumption.getEnergyConsumption()
@@ -50,10 +48,7 @@ public class MessageConsumer {
                     intermediateConsumptions.get(deviceId).getCounterMinutes() + 1
             );
 
-            System.out.println("from if:"+intermediateConsumptions.get(consumption.getMeteringDeviceId()).getValueSum());
-            System.out.println("from if:"+intermediateConsumptions.get(consumption.getMeteringDeviceId()).getCounterMinutes());
             if (intermediateConsumptions.get(deviceId).getCounterMinutes() == 6){
-                System.out.println("count is 6: " + intermediateConsumptions.get(deviceId).getCounterMinutes());
                 LocalDate date = LocalDate.parse(consumption.getDate(), formatterDate);
                 LocalTime time = LocalTime.parse(consumption.getTime(), formatterTime);
                 ConsumptionDTO consumptionDTO = new ConsumptionDTO(date,
@@ -65,8 +60,7 @@ public class MessageConsumer {
                 intermediateConsumptions.get(deviceId).setValueSum(0);
                 intermediateConsumptions.get(deviceId).setCounterMinutes(0);
                 MeteringDevice associatedDevice = deviceService.findDeviceById(consumption.getMeteringDeviceId());
-                System.out.println("Client of dev: ");
-                System.out.println(associatedDevice.getClient().getUsername());
+
                 if (associatedDevice.getMaxHourlyEnergyConsumption() < consumptionDTO.getEnergyConsumption()) {
                     System.out.println("Your metering device with id "+associatedDevice.getMeteringDeviceId() +
                             " registered an hourly consumption greater than the threshold. Value: "+
@@ -81,8 +75,6 @@ public class MessageConsumer {
         } else {
             intermediateConsumptions.put(consumption.getMeteringDeviceId(),
                     new HourlyConsumptionPart(consumption.getEnergyConsumption(), 1));
-            System.out.println("from else:"+intermediateConsumptions.get(consumption.getMeteringDeviceId()).getValueSum());
-            System.out.println("from else:"+intermediateConsumptions.get(consumption.getMeteringDeviceId()).getCounterMinutes());
         }
     }
 }

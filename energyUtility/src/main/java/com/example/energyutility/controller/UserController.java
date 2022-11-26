@@ -2,7 +2,6 @@ package com.example.energyutility.controller;
 
 import com.example.energyutility.dto.MessageDTO;
 import com.example.energyutility.dto.UserDTO;
-import com.example.energyutility.model.MeteringDevice;
 import com.example.energyutility.model.User;
 import com.example.energyutility.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

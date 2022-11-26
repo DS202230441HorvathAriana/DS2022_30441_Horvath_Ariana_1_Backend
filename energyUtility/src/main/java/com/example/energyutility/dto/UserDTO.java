@@ -1,7 +1,5 @@
 package com.example.energyutility.dto;
 
-import com.example.energyutility.model.Role;
-
 public class UserDTO {
 
     private String username;

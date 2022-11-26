@@ -1,11 +1,8 @@
 package com.example.energyutility.dto.builder;
 
 import com.example.energyutility.dto.ConsumptionDTO;
-import com.example.energyutility.dto.MeteringDeviceDTO;
 import com.example.energyutility.model.Consumption;
 import com.example.energyutility.model.MeteringDevice;
-import com.example.energyutility.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class ConsumptionBuilder {
     public ConsumptionBuilder() {

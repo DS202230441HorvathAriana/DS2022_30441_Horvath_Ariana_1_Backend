@@ -3,8 +3,6 @@ package com.example.energyutility.dto.builder;
 import com.example.energyutility.dto.MeteringDeviceDTO;
 import com.example.energyutility.model.MeteringDevice;
 import com.example.energyutility.model.User;
-import com.example.energyutility.repository.DeviceRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class DeviceBuilder {
 

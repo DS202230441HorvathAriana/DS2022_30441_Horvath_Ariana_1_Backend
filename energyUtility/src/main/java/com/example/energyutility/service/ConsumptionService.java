@@ -1,16 +1,12 @@
 package com.example.energyutility.service;
 
 import com.example.energyutility.dto.ConsumptionDTO;
-import com.example.energyutility.dto.MeteringDeviceDTO;
 import com.example.energyutility.dto.builder.ConsumptionBuilder;
-import com.example.energyutility.dto.builder.DeviceBuilder;
 import com.example.energyutility.model.Consumption;
 import com.example.energyutility.model.MeteringDevice;
-import com.example.energyutility.model.User;
 import com.example.energyutility.repository.ConsumptionRepository;
 import com.example.energyutility.repository.DeviceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
