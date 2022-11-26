@@ -11,4 +11,5 @@ public interface UserRepository extends AbstractRepository<User>{
     List<User> findAllByRole(Role role);
 
     void deleteByUsername(String username);
+
 }

@@ -1,17 +1,19 @@
 package com.example.energyutility;
 
-import com.example.energyutility.model.User;
-import com.example.energyutility.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 
 @SpringBootApplication
-        //(exclude = {org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class})
 public class EnergyUtilityApplication {
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -19,7 +21,19 @@ public class EnergyUtilityApplication {
         return http.build();
     }
 
-    public static void main(String[] args) {
+    @Bean
+    public WebMvcConfigurer corsConfigurer()
+    {
+        return  new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**").allowedMethods("GET","POST","PUT","DELETE")
+                        .allowedOrigins("*")
+                        .allowedHeaders("*");
+            }
+        };
+    }
+    public static void main(String[] args) throws IOException, TimeoutException {
         SpringApplication.run(EnergyUtilityApplication.class, args);
     }
 

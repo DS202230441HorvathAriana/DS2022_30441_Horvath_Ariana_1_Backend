@@ -21,7 +21,7 @@ public class MeteringDevice {
     @Column(name = "max_hourly_consumption")
     private float maxHourlyEnergyConsumption;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User client;
 

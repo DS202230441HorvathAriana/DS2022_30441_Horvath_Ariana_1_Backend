@@ -27,8 +27,7 @@ public class Consumption {
     @JoinColumn(name = "metering_device_id")
     private MeteringDevice meteringDevice;
 
-    public Consumption(Long consumptionId, LocalDate date, LocalTime time, float energyConsumption, MeteringDevice meteringDevice) {
-        this.consumptionId = consumptionId;
+    public Consumption(LocalDate date, LocalTime time, float energyConsumption, MeteringDevice meteringDevice) {
         this.date = date;
         this.time = time;
         this.energyConsumption = energyConsumption;

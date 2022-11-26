@@ -38,6 +38,10 @@ public class DeviceService {
             return null;
     }
 
+    public MeteringDevice findDeviceById(Long id) {
+        return deviceRepository.findByMeteringDeviceId(id);
+    }
+
     public List<MeteringDeviceDTO> findAll() {
         List<MeteringDeviceDTO> devices = deviceRepository.findAll()
                 .stream()
